@@ -51,17 +51,25 @@ xtabs(~ Treatment + Improved, data = Arthritis) %>%
 ```
 
 - How many patients were enrolled in the clinical trial?
+84 patients 
 
 - What is the probability a randomly selected patient received the placebo?
+43/84 
 
 - What is the probability a randomly selected patient received the placebo
   and had a marked improvement?
   
+  7/84
+  
 - What is the probability a randomly selected patient received the placebo
   and the treatment?
   
+  0/84 -- not possible. disjoined possibility 
+  
 - What is the probability a randomly selected patient had some improvement or
   was on the treatment?
+  
+(7+41)/84 
 
 ## Using computer simulations to calculate probabilities
 
@@ -78,15 +86,18 @@ Suppose we draw a single marble from our imaginary box, where all the marbles
 are equally likely to be selected. What is the probability the marble is blue? 
 How about white?
 
+3/8 chance for blue, 1/8 for white
+
 We can simulate this "drawing" with the `sample()` function.
 
 ```{r sample}
+#set.seed(100) -- this makes it the same every time
 sample(marbles, size = 1)
 ```
 
 We produced one random outcome from this experiment. To estimate the probability 
 of say getting a white marble, we need to repeat this experiment many many
-times.
+times. -- this is a random simulation
 
 In the `sample()` function we can change the `size` argument and set
 `replace = TRUE`. Setting `replace = TRUE` allows to draw from our population
@@ -96,11 +107,13 @@ experiment.
 ```{r simulate_draws}
 draw_results <- sample(marbles, size = 10000, replace = TRUE)
 ```
+size argument makes it done as many times as you want, then you have to replace it or else you would only be able to do it 8 times. 
 
 ```{r summarize_draws}
 counts <- table(draw_results)
 prop.table(counts)
 ```
+this reflects the law of large numbers, so the more times you do it the more times you are going to get closer to the actual percentages of the number of marbles. 
 
 How close is this value to the "true" probability?
 
@@ -120,6 +133,9 @@ compute this theoretically yet, but this is what computers are good at.
 
 Before we do this, what is your guess as to what the probability will be?
 
+it would be more likely for red and blue but not very likely for white. it would be more likely for the more common colors. 
+
+
 We'll still use `sample()` to run our simulation many times, but we'll
 use `dplyr` functions to compute the relative frequencies.
 
@@ -131,6 +147,7 @@ two_draw_results <- tibble(
 two_draw_results
 ```
 
+
 How can we add a variable to `two_draw_results` to see if `draw_1` and `draw_2`
 match?
 
@@ -139,6 +156,7 @@ two_draw_results <- two_draw_results %>%
   mutate(color_match = draw_1 == draw_2)
 two_draw_results
 ```
+we did two draws and we created a vairable if draw one is equal to draw two.
 
 All that remains is to compute the relative frequency of the observed outcomes 
 from our many simulations.
@@ -148,6 +166,7 @@ two_draw_results %>%
   count(color_match) %>% 
   mutate(proportion = n / sum(n))
 ```
+we are doing this the number of times it occurs over the total number of times there was a draw. so is false about 60% of the time and true about 40% of the time.
 
 ## Practice
 
@@ -160,6 +179,10 @@ Perform a simulation to compute this empirical probability.
 Write down your guess to the answer before you calculate it.
 
 ```{r simulate_rolls}
+roll_results <- tibble(
+  die_1 = replicate(n = 10000, expr = sample(1:6, size = 1)),
+  die_2 = replicate(n = 10000, expr = sample(1:6, size = 1))
+)
 
 ```
 
