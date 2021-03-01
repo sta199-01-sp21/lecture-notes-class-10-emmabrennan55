@@ -183,16 +183,23 @@ roll_results <- tibble(
   die_1 = replicate(n = 10000, expr = sample(1:6, size = 1)),
   die_2 = replicate(n = 10000, expr = sample(1:6, size = 1))
 )
-
 ```
 
 ```{r identify_events}
-
+roll_results <- roll_results %>% 
+  mutate(event_1 = die_1 ^2 == die_2,
+         event_2 = abs(die_1 - die_2) == 4)
+roll_results
 ```
+if one of these is true the other isnt --
 
 ```{r summarize_rolls}
+roll_results %>%
+  summarise(event_1_prob = mean(event_1),
+            event_2_prob = mean(event_2))
 
 ```
+it looks like event 2 is less likely. 
 
 ## Additional Resources-please look at before Weds.
 
