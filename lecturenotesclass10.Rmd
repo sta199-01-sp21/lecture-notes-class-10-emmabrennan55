@@ -1,9 +1,11 @@
 ---
 title: "Introduction to probability"
-author: ""
-date: ""
-output: html_document
-editor_options: 
+author: "Emma Brennan"
+date: "March 1"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
 ---
 
